@@ -4,12 +4,12 @@ import './styles/global.css'
 import { useState } from 'react'
 import Selected from 'react-select'
 import { api } from './services/api';
-import { ReactPlayer } from './components/ReactPlayer';
 import { customStyles } from './styles/selectStyles';
 
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
-
+import ReactHowler from 'react-howler'
+import { ReactPlayer } from './components/ReactPlayer';
 
 
 interface AudioPlayer {
@@ -30,6 +30,7 @@ function App() {
     { id: 8, note: "E" },
     { id: 9, note: "F" }
   ]
+
   let notesLouds = [
     { id: 10, note: "F#" },
     { id: 11, note: "G" },
@@ -42,9 +43,6 @@ function App() {
   const [secondLabelSelected, setSecondLabelSelected] = useState('')
   const [volume, setVolume] = useState(0.5)
   const [volumeSecond, setVolumeSecond] = useState(0.5)
-
-  // const [pads, setPads] = useState<PadsProps[]>([])
-  // const [pad, setPad] = useState<PadsProps>({} as PadsProps)
 
 
   const options = [
@@ -85,12 +83,12 @@ function App() {
   }
 
   function onStop() {
-    setSongPadFirst(new Audio())
-    setSongPadSecond(new Audio())
+    setSongPadFirst({ src: '' })
+    setSongPadSecond({ src: '' })
     setIsPlaying(0)
   }
 
-  function onVolumeChanged(value: number) {
+  function onVolumeFirstChanged(value: number) {
 
     var change = value * 0.01
     if (change > 1) change = 1
@@ -106,7 +104,8 @@ function App() {
   }
 
   return (
-    <>
+
+    <div>
       <div className='w-full p-20 flex justify-around items-center'>
 
         <div className='flex flex-col'>
@@ -133,7 +132,7 @@ function App() {
 
       </div>
       <div className='flex flex-cols-2 justify-center items-center'>
-        <div className=''>
+        <div>
 
           <div className='w-[96%] h-20 flex flex-row justify-end items-center my-5'>
             <div className='bg-[#00b5b9] w-[520px] h-20 flex justify-center items-center rounded-lg'>
@@ -165,16 +164,6 @@ function App() {
 
           <div className='flex flex-row justify-center items-center px-5'>
 
-            <ReactPlayer
-              src={`${songPadFirst?.src}`}
-              volume={volume}
-            />
-
-            <ReactPlayer
-              src={`${songPadSecond?.src}`}
-              volume={volumeSecond}
-            />
-
             {
               notesBass.map((note, index) => (
 
@@ -193,18 +182,6 @@ function App() {
                   {note.note}
                 </button>
 
-
-
-
-                // ) : (
-                //   <button key={index} onClick={onStop}
-                //     className='bg-[#00b5b9] 
-                // text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl'
-                //   >
-                //     {note.note}
-                //   </button>
-
-
               ))
             }
           </div>
@@ -222,13 +199,6 @@ function App() {
                 >
                   {note.note}
                 </button>
-                // ) : (
-                //   <button key={index} onClick={onStop}
-                //     className='bg-[#00b5b9] text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl'
-                //   >
-                //     {note.note}
-                //   </button>
-                // )
 
               ))
             }
@@ -242,7 +212,7 @@ function App() {
             <Box sx={{ height: 300 }}>
               <Slider
                 aria-label='Temperature'
-                getAriaValueText={(value: number) => onVolumeChanged(value)}
+                getAriaValueText={(value: number) => onVolumeFirstChanged(value)}
                 defaultValue={50}
                 orientation='vertical'
                 valueLabelDisplay="auto"
@@ -277,7 +247,17 @@ function App() {
       </footer>
 
 
-    </>
+      <ReactPlayer
+        src={`${songPadFirst?.src ? songPadFirst.src : undefined}`}
+        volume={volume}
+      />
+
+      <ReactPlayer
+        src={`${songPadSecond?.src ? songPadSecond.src : undefined}`}
+        volume={volumeSecond}
+      />
+
+    </div>
   )
 }
 

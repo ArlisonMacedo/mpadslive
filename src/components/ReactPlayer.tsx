@@ -1,34 +1,23 @@
-import { useEffect } from "react";
+
 import ReactAudioPlayer from "react-audio-player";
+import ReactHowler from "react-howler";
 
 
 interface ReactPlayerProps {
   src: string;
-  volume?: number
+  volume?: number;
 }
 
 
 export function ReactPlayer(props: ReactPlayerProps) {
 
-  // useEffect(() => {
-  //   console.log(props.volume)
-  // }, [props.volume])
-
-
   return (
-    <ReactAudioPlayer
-      id="audioPlay"
-      src={props.src}
-      autoPlay
+    <ReactHowler
+      src={`${props.src}`}
+      playing
       loop
-      preload='auto'
-      className="bg-transparent hidden"
-      controlsList="nodownload"
-      controls
+      format={['mp3']}
       volume={props.volume}
-      style={{
-        display: "none"
-      }}
     />
 
   )
