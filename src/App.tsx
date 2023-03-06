@@ -8,7 +8,6 @@ import { customStyles } from './styles/selectStyles';
 
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
-import ReactHowler from 'react-howler'
 import { ReactPlayer } from './components/ReactPlayer';
 
 
@@ -61,6 +60,7 @@ function App() {
 
   async function handleOnlyPadAudio(id: number) {
     if (labelSelected) {
+
       const response = await api.get(`${labelSelected}/${id}`)
       let songApi = new Audio(response.data.pad_url)
       setSongPadFirst(songApi)
