@@ -1,7 +1,7 @@
 
 
 import './styles/global.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Selected from 'react-select'
 import { api } from './services/api';
 import { customStyles } from './styles/selectStyles';
@@ -9,6 +9,7 @@ import { customStyles } from './styles/selectStyles';
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
 import { ReactPlayer } from './components/ReactPlayer';
+import axios from 'axios';
 
 
 interface AudioPlayer {
@@ -58,10 +59,18 @@ function App() {
     setSecondLabelSelected(value)
   }
 
+  useEffect(() => {
+
+    fetch('https://api.npms.io/v2/search?q=react')
+      .then(response => console.log(response.json()))
+  }, [])
+
+
+
   async function handleOnlyPadAudio(id: number) {
     if (labelSelected) {
-
       const response = await api.get(`${labelSelected}/${id}`)
+      console.log(response.config.url)
       let songApi = new Audio(response.data.pad_url)
       setSongPadFirst(songApi)
       setIsPlaying(id)
