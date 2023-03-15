@@ -214,7 +214,7 @@ function App() {
           </div>
         </div>
 
-        {/* <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-2'>
           <div className='flex flex-col justify-center items-center w-52 '>
             <p className='text-base font-bold font-inter mb-2'>Canal 1</p>
             <Box sx={{ height: 300 }}>
@@ -245,7 +245,7 @@ function App() {
               />
             </Box>
           </div>
-        </div> */}
+        </div>
 
 
       </div>
