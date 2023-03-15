@@ -1,7 +1,7 @@
 
 
 import './styles/global.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Selected from 'react-select'
 import { api } from './services/api';
 import { customStyles } from './styles/selectStyles';
@@ -9,7 +9,6 @@ import { customStyles } from './styles/selectStyles';
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
 import { ReactPlayer } from './components/ReactPlayer';
-import axios from 'axios';
 
 
 interface AudioPlayer {
@@ -59,18 +58,18 @@ function App() {
     setSecondLabelSelected(value)
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    fetch('https://api.npms.io/v2/search?q=react')
-      .then(response => console.log(response.json()))
-  }, [])
+  //   fetch('https://api.npms.io/v2/search?q=react')
+  //     .then(response => console.log(response.json()))
+  // }, [])
 
 
 
   async function handleOnlyPadAudio(id: number) {
     if (labelSelected) {
       const response = await api.get(`${labelSelected}/${id}`)
-      console.log(response.config.url)
+      console.log(response.data)
       let songApi = new Audio(response.data.pad_url)
       setSongPadFirst(songApi)
       setIsPlaying(id)
@@ -215,7 +214,7 @@ function App() {
           </div>
         </div>
 
-        <div className='grid grid-cols-2'>
+        {/* <div className='grid grid-cols-2'>
           <div className='flex flex-col justify-center items-center w-52 '>
             <p className='text-base font-bold font-inter mb-2'>Canal 1</p>
             <Box sx={{ height: 300 }}>
@@ -246,7 +245,7 @@ function App() {
               />
             </Box>
           </div>
-        </div>
+        </div> */}
 
 
       </div>
