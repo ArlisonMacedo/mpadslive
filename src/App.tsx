@@ -1,7 +1,7 @@
 
 
 import './styles/global.css'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Selected from 'react-select'
 import { api } from './services/api';
 import { customStyles } from './styles/selectStyles';
@@ -9,11 +9,12 @@ import { customStyles } from './styles/selectStyles';
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
 import { ReactPlayer } from './components/ReactPlayer';
+import Popper from '@mui/material/Popper';
 
 
 interface AudioPlayer {
   src: string;
-  none?: null
+  // none?: null
 }
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
   const [songPadFirst, setSongPadFirst] = useState<AudioPlayer>()
   const [songPadSecond, setSongPadSecond] = useState<AudioPlayer>()
   const [isPlaying, setIsPlaying] = useState(0)
+
   let notesBass = [
     { id: 4, note: "C", },
     { id: 5, note: "C#" },
@@ -38,10 +40,12 @@ function App() {
     { id: 2, note: "A#" },
     { id: 3, note: "B" }
   ]
+
   const [labelSelected, setLabelSelected] = useState('')
   const [secondLabelSelected, setSecondLabelSelected] = useState('')
   const [volume, setVolume] = useState(0.5)
   const [volumeSecond, setVolumeSecond] = useState(0.5)
+
 
 
   const options = [
@@ -50,38 +54,37 @@ function App() {
     { value: 'guitar_pad', label: 'Guitar Pad' },
   ]
 
-  async function handleValueSelect(value: string) {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  function handleValueSelect(value: string) {
     setLabelSelected(value)
+
   }
 
-  async function handleSecondValueSelect(value: string) {
+  function handleSecondValueSelect(value: string) {
     setSecondLabelSelected(value)
   }
 
-  // useEffect(() => {
-
-  //   fetch('https://api.npms.io/v2/search?q=react')
-  //     .then(response => console.log(response.json()))
-  // }, [])
-
-
 
   async function handleOnlyPadAudio(id: number) {
+
     if (labelSelected) {
       const response = await api.get(`${labelSelected}/${id}`)
-      console.log(response.data)
-      let songApi = new Audio(response.data.pad_url)
-      setSongPadFirst(songApi)
+      var url = response.data.pad_url
+      setSongPadFirst(new Audio(url))
+
       setIsPlaying(id)
     }
-    else if (!labelSelected && !secondLabelSelected) {
+    if (!labelSelected && !secondLabelSelected) {
       alert('Opsss! Seleione uma biblioteca de timbre')
       return
     }
 
+
   }
 
   async function handleOnlyPadAudioSecond(id: number) {
+    // console.log(secondLabelSelected)
     if (secondLabelSelected) {
       const response = await api.get(`${secondLabelSelected}/${id}`)
       let songApi = new Audio(response.data.pad_url)
@@ -89,6 +92,7 @@ function App() {
       setIsPlaying(id)
     }
   }
+
 
   function onStop() {
     setSongPadFirst({ src: '' })
@@ -111,43 +115,53 @@ function App() {
     return ''
   }
 
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  }
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popper' : undefined;
+
+
   return (
 
     <div>
-      <div className='w-full p-20 flex justify-around items-center'>
+      <div className='flex justify-center items-cente '>
+        <div className='w-full mt-6 h-1 p-20 flex justify-around items-center bg-[#00000A]'>
 
-        <div className='flex flex-col'>
-          <h1 className='font-inter font-semibold'>CANAL 1</h1>
-          <Selected
-            options={options} className='text-black font-inter font-semibold'
-            onChange={(e) => handleValueSelect(String(e?.value))}
-            styles={customStyles}
-            placeholder='Selecione um timbre'
-          />
+          <div className='flex flex-col'>
+            <h1 className='font-inter font-semibold'>CANAL 1</h1>
+            <Selected
+              options={options} className='text-black font-inter font-semibold'
+              onChange={(e) => handleValueSelect(String(e?.value))}
+              styles={customStyles}
+              placeholder='Selecione um timbre'
+            />
+
+          </div>
+
+          <div className='flex flex-col'>
+            <h1 className='font-inter font-semibold'>CANAL 2</h1>
+            <Selected
+              options={options} className='text-black font-inter font-semibold'
+              onChange={(e) => handleSecondValueSelect(String(e?.value))}
+              styles={customStyles}
+              placeholder='Selecione um timbre'
+            />
+
+          </div>
 
         </div>
-
-        <div className='flex flex-col'>
-          <h1 className='font-inter font-semibold'>CANAL 2</h1>
-          <Selected
-            options={options} className='text-black font-inter font-semibold'
-            onChange={(e) => handleSecondValueSelect(String(e?.value))}
-            styles={customStyles}
-            placeholder='Selecione um timbre'
-          />
-
-        </div>
-
       </div>
-      <div className='flex flex-cols-2 justify-center items-center'>
+
+      <div className='flex flex-cols-2 justify-center items-center mt-8'>
         <div>
 
           <div className='w-[96%] h-20 flex flex-row justify-end items-center my-5'>
-            <div className='bg-[#00b5b9] w-[520px] h-20 flex justify-center items-center rounded-lg'>
+            <div className='bg-[#0074b8] w-[520px] h-20 flex justify-center items-center rounded-lg'>
 
               {
                 labelSelected || secondLabelSelected ?
-                  <p className='font-inter text-lg font-bold'>
+                  <p className='font-inter text-[16px] font-bold'>
                     PAD SELECIONADO: <strong>{labelSelected.toUpperCase().split('_')}</strong>
                     {secondLabelSelected && (
                       <strong> {'   '} {secondLabelSelected.toUpperCase().split('_')}</strong>
@@ -157,7 +171,8 @@ function App() {
               }
               {/* </p> */}
             </div>
-            <div className=''>
+            <div className='flex flex-row'>
+
               <button className='bg-red-600 w-20 h-20 rounded-lg 
                 flex justify-center items-center font-inter font-bold ml-4
                 hover:bg-red-500'
@@ -176,20 +191,29 @@ function App() {
               notesBass.map((note, index) => (
 
                 // !isPlaying ? (
-                <button
-                  key={index}
-                  // id={String(index)}
-                  onClick={() => {
-                    handleOnlyPadAudio(note.id),
-                      handleOnlyPadAudioSecond(note.id)
-                  }}
-                  className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#00b5b9]"
-                    : "bg-zinc-400 text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
-                >
+                <>
+                  <button
+                    aria-describedby={id}
+                    type="button"
+                    key={index}
+                    // id={String(index)}
+                    onClick={() => {
+                      handleOnlyPadAudio(note.id),
+                        handleOnlyPadAudioSecond(note.id),
+                        handleClick
+                    }}
+                    className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#0074b8]"
+                      : "bg-[#333333] text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
+                  >
 
-                  {note.note}
-                </button>
-
+                    {note.note}
+                  </button>
+                  <Popper id={id} open={open} anchorEl={anchorEl}>
+                    <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+                      The content of the Popper.
+                    </Box>
+                  </Popper>
+                </>
               ))
             }
           </div>
@@ -202,8 +226,8 @@ function App() {
                   handleOnlyPadAudio(note.id),
                     handleOnlyPadAudioSecond(note.id)
                 }}
-                  className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#00b5b9]"
-                    : "bg-zinc-400 text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
+                  className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#0074b8]"
+                    : "bg-[#333333] text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
                 >
                   {note.note}
                 </button>
@@ -250,7 +274,7 @@ function App() {
 
       </div>
 
-      <footer className='w-full flex justify-center items-start py-7'>
+      <footer className='w-3/5 flex justify-start items-end pl-32 ml-10'>
         <h1 className='font-poppins font-bold text-3xl'>MPADS LIVE</h1>
       </footer>
 
