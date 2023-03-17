@@ -9,7 +9,8 @@ import { customStyles } from './styles/selectStyles';
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
 import { ReactPlayer } from './components/ReactPlayer';
-import Popper from '@mui/material/Popper';
+
+import D from './media/D.mp3'
 
 
 interface AudioPlayer {
@@ -69,9 +70,9 @@ function App() {
   async function handleOnlyPadAudio(id: number) {
 
     if (labelSelected) {
-      const response = await api.get(`${labelSelected}/${id}`)
-      var url = response.data.pad_url
-      setSongPadFirst(new Audio(url))
+      // const response = await api.get(`${labelSelected}/${id}`)
+      // var url = response.data.pad_url
+      setSongPadFirst(new Audio(D))
 
       setIsPlaying(id)
     }
@@ -86,8 +87,9 @@ function App() {
   async function handleOnlyPadAudioSecond(id: number) {
     // console.log(secondLabelSelected)
     if (secondLabelSelected) {
-      const response = await api.get(`${secondLabelSelected}/${id}`)
-      let songApi = new Audio(response.data.pad_url)
+      // const response = await api.get(`${secondLabelSelected}/${id}`)
+
+      let songApi = new Audio(D)
       setSongPadSecond(songApi)
       setIsPlaying(id)
     }
@@ -191,29 +193,23 @@ function App() {
               notesBass.map((note, index) => (
 
                 // !isPlaying ? (
-                <>
-                  <button
-                    aria-describedby={id}
-                    type="button"
-                    key={index}
-                    // id={String(index)}
-                    onClick={() => {
-                      handleOnlyPadAudio(note.id),
-                        handleOnlyPadAudioSecond(note.id),
-                        handleClick
-                    }}
-                    className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#0074b8]"
-                      : "bg-[#333333] text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
-                  >
+                <button
+                  aria-describedby={id}
+                  type="button"
+                  key={index}
+                  // id={String(index)}
+                  onClick={() => {
+                    handleOnlyPadAudio(note.id),
+                      handleOnlyPadAudioSecond(note.id),
+                      handleClick
+                  }}
+                  className={`${(isPlaying === note.id) ? "text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl bg-[#0074b8]"
+                    : "bg-[#333333] text-white w-24 h-20 mr-2 rounded-md font-inter font-bold text-4xl"}`}
+                >
 
-                    {note.note}
-                  </button>
-                  <Popper id={id} open={open} anchorEl={anchorEl}>
-                    <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-                      The content of the Popper.
-                    </Box>
-                  </Popper>
-                </>
+                  {note.note}
+                </button>
+
               ))
             }
           </div>
