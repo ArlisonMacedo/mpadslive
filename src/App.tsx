@@ -72,7 +72,7 @@ function App() {
     if (labelSelected) {
       // const response = await api.get(`${labelSelected}/${id}`)
       // var url = response.data.pad_url
-      setSongPadFirst(new Audio(D))
+      setSongPadFirst(new Audio("https://mpadslive.com/uploads/ambient_pad/C.mp3"))
 
       setIsPlaying(id)
     }
