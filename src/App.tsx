@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import { ReactPlayer } from './components/ReactPlayer';
 
 import D from './media/D.mp3'
+import { Adsense } from '@ctrl/react-adsense';
 
 
 interface AudioPlayer {
@@ -70,9 +71,9 @@ function App() {
   async function handleOnlyPadAudio(id: number) {
 
     if (labelSelected) {
-      // const response = await api.get(`${labelSelected}/${id}`)
-      // var url = response.data.pad_url
-      setSongPadFirst(new Audio("https://mpadslive.com/uploads/ambient_pad/C.mp3"))
+      const response = await api.get(`${labelSelected}/${id}`)
+      var url = response.data.pad_url
+      setSongPadFirst(new Audio(url))
 
       setIsPlaying(id)
     }
@@ -87,9 +88,9 @@ function App() {
   async function handleOnlyPadAudioSecond(id: number) {
     // console.log(secondLabelSelected)
     if (secondLabelSelected) {
-      // const response = await api.get(`${secondLabelSelected}/${id}`)
+      const response = await api.get(`${secondLabelSelected}/${id}`)
 
-      let songApi = new Audio(D)
+      let songApi = new Audio(response.data.pad_url)
       setSongPadSecond(songApi)
       setIsPlaying(id)
     }
@@ -265,6 +266,13 @@ function App() {
               />
             </Box>
           </div>
+          <Adsense
+            client='ca-pub-4161062064793325'
+            slot=''
+            style={{ display: 'block' }}
+            layout='in-article'
+            format='fluid'
+          />
         </div>
 
 
