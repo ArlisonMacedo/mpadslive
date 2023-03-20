@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://mpadslive.com/apps_nodejs",
+  "homepage": "https://mpadslive.com/apps_nodejs/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
